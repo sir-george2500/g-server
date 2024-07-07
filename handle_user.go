@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/sir-george2500/g-server/internal/auth"
 	"github.com/sir-george2500/g-server/internal/database"
 )
 
@@ -34,6 +35,22 @@ func (apiCfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request
 
 	if err != nil {
 		responWithError(w, 400, fmt.Sprintf("Couldn't create user %v", err))
+		return
+	}
+
+	responWithJson(w, 201, databaseUserToUser(user))
+}
+
+// handle respon with user
+func (apiCfg *apiConfig) handleGetUser(w http.ResponseWriter, r *http.Request) {
+	apiKey, err := auth.GetApiKey(r.Header)
+	if err != nil {
+		responWithError(w, 403, fmt.Sprintf("Auth Header %v", err))
+	}
+
+	user, err := apiCfg.DB.GetUserByAPIKey(r.Context(), apiKey)
+	if err != nil {
+		responWithError(w, 403, fmt.Sprintf("Couldn't get user %v", err))
 		return
 	}
 
