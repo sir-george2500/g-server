@@ -12,9 +12,10 @@ import (
 )
 
 // handle respon with user
-func (apiCfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request) {
+func (apiCfg *apiConfig) handleCreateFeeds(w http.ResponseWriter, r *http.Request, user database.User) {
 	type paramenters struct {
 		Name string `json:"name"`
+		URL  string `json:"url"`
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -26,22 +27,18 @@ func (apiCfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	user, err := apiCfg.DB.CreateUser(r.Context(), database.CreateUserParams{
+	feed, err := apiCfg.DB.CreateFeed(r.Context(), database.CreateFeedParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		Name:      param.Name,
+		Url:       param.URL,
+		UserID:    user.ID,
 	})
 
 	if err != nil {
-		responWithError(w, 400, fmt.Sprintf("Couldn't create user %v", err))
+		responWithError(w, 400, fmt.Sprintf("Couldn't create feed%v", err))
 		return
 	}
 
-	responWithJson(w, 201, databaseUserToUser(user))
-}
-
-// handle respon with user
-func (apiCfg *apiConfig) handleGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
-	responWithJson(w, 200, databaseUserToUser(user))
+	responWithJson(w, 201, databaseFeedToFeed(feed))
 }
