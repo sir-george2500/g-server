@@ -31,6 +31,7 @@ func (apiCfg *apiConfig) handleCreateFeeds(w http.ResponseWriter, r *http.Reques
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
+		Name:      param.Name,
 		Url:       param.URL,
 		UserID:    user.ID,
 	})
@@ -41,4 +42,15 @@ func (apiCfg *apiConfig) handleCreateFeeds(w http.ResponseWriter, r *http.Reques
 	}
 
 	responWithJson(w, 201, databaseFeedToFeed(feed))
+}
+
+// handle respon with user
+func (apiCfg *apiConfig) handleGetFeeds(w http.ResponseWriter, r *http.Request) {
+	feeds, err := apiCfg.DB.GetFeeds(r.Context())
+	if err != nil {
+		responWithError(w, 400, fmt.Sprintf("Could not get feed%v", err))
+		return
+	}
+
+	responWithJson(w, 200, databaseFeedToFeeds(feeds))
 }
