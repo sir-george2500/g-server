@@ -3,12 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"time"
-
 	"github.com/google/uuid"
 	_ "github.com/sir-george2500/g-server/internal/auth"
 	"github.com/sir-george2500/g-server/internal/database"
+	"net/http"
+	"time"
 )
 
 // handle respon with user
@@ -44,4 +43,17 @@ func (apiCfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request
 // handle respon with user
 func (apiCfg *apiConfig) handleGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
 	responWithJson(w, 200, databaseUserToUser(user))
+}
+
+func (apiCfg *apiConfig) handlGetPostForUser(w http.ResponseWriter, r *http.Request, user database.User) {
+	posts, err := apiCfg.DB.GetPostForUser(r.Context(), database.GetPostForUserParams{
+		UserID: user.ID,
+		Limit:  10,
+	})
+
+	if err != nil {
+		responWithError(w, 400, fmt.Sprintf("Couldn't create user post %v", err))
+		return
+	}
+	responWithJson(w, 200, databasePostsToPosts(posts))
 }

@@ -2,14 +2,16 @@ package main
 
 import (
 	"database/sql"
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sir-george2500/g-server/internal/database"
-	"log"
-	"net/http"
-	"os"
 )
 
 type apiConfig struct {
@@ -17,6 +19,7 @@ type apiConfig struct {
 }
 
 func main() {
+
 	godotenv.Load(".env")
 	dbURL := os.Getenv("DB_URL")
 
@@ -35,10 +38,12 @@ func main() {
 	if dberr != nil {
 		log.Fatal("fail to connect to the database", dberr)
 	}
-
+	db := database.New(conn)
 	apiCfg := apiConfig{
-		DB: database.New(conn),
+		DB: db,
 	}
+
+	go startScraping(db, 10, time.Minute)
 
 	// create a new Router
 	router := chi.NewRouter()
@@ -65,7 +70,9 @@ func main() {
 	v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handleCreateFeeds))
 	v1Router.Get("/feeds", apiCfg.handleGetFeeds)
 	v1Router.Post("/feed_follows", apiCfg.middlewareAuth(apiCfg.handleCreateFeedsFollow))
+	v1Router.Get("/feed_follows", apiCfg.middlewareAuth(apiCfg.handleGetFeedsFollow))
 	v1Router.Delete("/feed_follows/{feedFollowID}", apiCfg.middlewareAuth(apiCfg.handleDeleteFeedFollow))
+	v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handlGetPostForUser))
 	//Mount the router
 	router.Mount("/v1", v1Router)
 	// start the server
