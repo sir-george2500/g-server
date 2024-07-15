@@ -32,3 +32,5 @@ Remember to add your  environment variables
 PORT = 
 DBURL = 
 ```
+---
+License under [MIT](https://opensource.org/licenses/MIT). This code is free to use and modify. If you like, make money out of it, even rob it as grease on your skin. I give you such permission hahaha.
