@@ -26,3 +26,8 @@ go build && ./g-server
 
 To view the api Docs please go to 
 `http://localhost:8080/swagger/index.html#/`
+Remember to add your in environment variable
+```bash
+PORT = 
+DBURL = 
+```
