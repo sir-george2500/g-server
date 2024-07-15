@@ -1,9 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server.",
+        "description": "g-server - a full-blown RSS feed aggregator.",
         "title": "g-server API",
-        "contact": {},
+        "contact": {
+            "name": "George S Mulbah",
+            "url": "https://github.com/sir-george2500"
+        },
         "version": "1.0"
     },
     "host": "localhost:8080",

@@ -94,8 +94,10 @@ definitions:
     type: object
 host: localhost:8080
 info:
-  contact: {}
-  description: This is a sample server.
+  contact:
+    name: George S Mulbah
+    url: https://github.com/sir-george2500
+  description: g-server - a full-blown RSS feed aggregator.
   title: g-server API
   version: "1.0"
 paths:

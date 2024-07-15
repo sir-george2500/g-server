@@ -9,7 +9,10 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "George S Mulbah",
+            "url": "https://github.com/sir-george2500"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -478,7 +481,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/v1",
 	Schemes:          []string{},
 	Title:            "g-server API",
-	Description:      "This is a sample server.",
+	Description:      "g-server - a full-blown RSS feed aggregator.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
