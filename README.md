@@ -19,4 +19,18 @@ The fact that this project is based on relationships—linking users to feeds an
 So there you have it! No more tab-hopping, just pure, uninterrupted reading bliss.
 
 
+To build the executable run 
+```bash 
+go build && ./g-server
+```
+
+To view the api Docs please go to 
+`http://localhost:8080/swagger/index.html#/`
+```
+
+
+```
+```
+
+
 

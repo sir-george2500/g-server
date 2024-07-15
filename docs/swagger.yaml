@@ -1,0 +1,298 @@
+basePath: /v1
+definitions:
+  database.FeedsFollow:
+    properties:
+      createdAt:
+        type: string
+      feedID:
+        type: string
+      id:
+        type: string
+      updatedAt:
+        type: string
+      userID:
+        type: string
+    type: object
+  main.CreateFeed_swag:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        type: string
+      url:
+        type: string
+      userID:
+        type: string
+    type: object
+  main.CreateUser:
+    properties:
+      name:
+        type: string
+    type: object
+  main.Feed:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+      url:
+        type: string
+      user_id:
+        type: string
+    type: object
+  main.Post:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      feed_id:
+        type: string
+      id:
+        type: string
+      publishe_at:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      url:
+        type: string
+    type: object
+  main.User:
+    properties:
+      api_key:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  main.paramenters:
+    properties:
+      feed_id:
+        type: string
+    type: object
+  main.paramenters_feed_swag:
+    properties:
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server.
+  title: g-server API
+  version: "1.0"
+paths:
+  /feed_follows:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all feed follows for the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.FeedsFollow'
+            type: array
+        "400":
+          description: Error message
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Get Feed Follows
+      tags:
+      - feed_follows
+    post:
+      consumes:
+      - application/json
+      description: Create a new feed follow for the authenticated user
+      parameters:
+      - description: Feed Follow Parameters
+        in: body
+        name: feed
+        required: true
+        schema:
+          $ref: '#/definitions/main.paramenters'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/database.FeedsFollow'
+        "400":
+          description: Error message
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Create Feed Follow
+      tags:
+      - feed_follows
+  /feed_follows/{feedFollowID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a feed follow for the authenticated user
+      parameters:
+      - description: Feed Follow ID
+        in: path
+        name: feedFollowID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Error message
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Feed Follow
+      tags:
+      - feed_follows
+  /feeds:
+    get:
+      consumes:
+      - application/json
+      description: Get the list of feeds
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Feed'
+            type: array
+      summary: Get Feeds
+      tags:
+      - feeds
+    post:
+      consumes:
+      - application/json
+      description: Create a new feed with the given parameters
+      parameters:
+      - description: Feed Parameters
+        in: body
+        name: feed
+        required: true
+        schema:
+          $ref: '#/definitions/main.paramenters_feed_swag'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.CreateFeed_swag'
+        "400":
+          description: Error message
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Create Feed
+      tags:
+      - feeds
+  /posts:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve posts associated with the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Post'
+            type: array
+        "400":
+          description: Error message
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Get Posts for User
+      tags:
+      - posts
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve details of the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.User'
+        "400":
+          description: Error message
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Get User
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the given parameters
+      parameters:
+      - description: User Parameters
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.CreateUser'
+        "400":
+          description: Error message
+          schema:
+            type: string
+      summary: Create User
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

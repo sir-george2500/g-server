@@ -11,7 +11,32 @@ import (
 	"github.com/sir-george2500/g-server/internal/database"
 )
 
-// handle respon with user
+type paramenters_feed_swag struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
+
+// Success 200
+type CreateFeed_swag struct {
+	ID        uuid.UUID
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Name      string
+	Url       string
+	UserID    uuid.UUID
+}
+
+// handleCreateFeeds creates a new feed for the authenticated user
+// @Summary Create Feed
+// @Description Create a new feed with the given parameters
+// @Tags feeds
+// @Accept json
+// @Produce json
+// @Param feed body paramenters_feed_swag true "Feed Parameters"
+// @Success 201 {object} CreateFeed_swag
+// @Failure 400 {string} string "Error message"
+// @Router /feeds [post]
+// @Security ApiKeyAuth
 func (apiCfg *apiConfig) handleCreateFeeds(w http.ResponseWriter, r *http.Request, user database.User) {
 	type paramenters struct {
 		Name string `json:"name"`
@@ -44,7 +69,13 @@ func (apiCfg *apiConfig) handleCreateFeeds(w http.ResponseWriter, r *http.Reques
 	responWithJson(w, 201, databaseFeedToFeed(feed))
 }
 
-// handle respon with user
+// @Summary Get Feeds
+// @Description Get the list of feeds
+// @Tags feeds
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} Feed
+// @Router /feeds [get]
 func (apiCfg *apiConfig) handleGetFeeds(w http.ResponseWriter, r *http.Request) {
 	feeds, err := apiCfg.DB.GetFeeds(r.Context())
 	if err != nil {

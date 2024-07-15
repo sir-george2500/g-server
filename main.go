@@ -11,12 +11,23 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	_ "github.com/sir-george2500/g-server/docs"
 	"github.com/sir-george2500/g-server/internal/database"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type apiConfig struct {
 	DB *database.Queries
 }
+
+// @title g-server API
+// @version 1.0
+// @description This is a sample server.
+// @host localhost:8080
+// @BasePath /v1
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 
@@ -73,12 +84,18 @@ func main() {
 	v1Router.Get("/feed_follows", apiCfg.middlewareAuth(apiCfg.handleGetFeedsFollow))
 	v1Router.Delete("/feed_follows/{feedFollowID}", apiCfg.middlewareAuth(apiCfg.handleDeleteFeedFollow))
 	v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handlGetPostForUser))
-	//Mount the router
-	router.Mount("/v1", v1Router)
-	// start the server
-	log.Printf("Serve Staring on Port %v", portString)
-	err := srv.ListenAndServe()
 
+	// Serve Swagger UI
+	router.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:"+portString+"/swagger/doc.json"), // The url pointing to API definition
+	))
+
+	// Mount the router
+	router.Mount("/v1", v1Router)
+
+	// Start the server
+	log.Printf("Server starting on Port %v", portString)
+	err := srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}

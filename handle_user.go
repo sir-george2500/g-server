@@ -10,7 +10,20 @@ import (
 	"time"
 )
 
-// handle respon with user
+type CreateUser struct {
+	Name string `json:"name"`
+}
+
+// handleCreateUser creates a new user
+// @Summary Create User
+// @Description Create a new user with the given parameters
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body CreateUser true "User Parameters"
+// @Success 201 {object} CreateUser
+// @Failure 400 {string} string "Error message"
+// @Router /users [post]
 func (apiCfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 	type paramenters struct {
 		Name string `json:"name"`
@@ -40,11 +53,28 @@ func (apiCfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request
 	responWithJson(w, 201, databaseUserToUser(user))
 }
 
-// handle respon with user
+// @Summary Get User
+// @Description Retrieve details of the authenticated user
+// @Tags users
+// @Accept json
+// @Produce json
+// @Success 200 {object} User
+// @Failure 400 {string} string "Error message"
+// @Router /users [get]
+// @Security ApiKeyAuth
 func (apiCfg *apiConfig) handleGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
 	responWithJson(w, 200, databaseUserToUser(user))
 }
 
+// @Summary Get Posts for User
+// @Description Retrieve posts associated with the authenticated user
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Success 200 {array} Post
+// @Failure 400 {string} string "Error message"
+// @Router /posts [get]
+// @Security ApiKeyAuth
 func (apiCfg *apiConfig) handlGetPostForUser(w http.ResponseWriter, r *http.Request, user database.User) {
 	posts, err := apiCfg.DB.GetPostForUser(r.Context(), database.GetPostForUserParams{
 		UserID: user.ID,
@@ -52,8 +82,8 @@ func (apiCfg *apiConfig) handlGetPostForUser(w http.ResponseWriter, r *http.Requ
 	})
 
 	if err != nil {
-		responWithError(w, 400, fmt.Sprintf("Couldn't create user post %v", err))
+		responWithError(w, 400, fmt.Sprintf("Couldn't retrieve user posts: %v", err))
 		return
 	}
-	responWithJson(w, 200, databasePostsToPosts(posts))
+	responWithJson(w, http.StatusOK, databasePostsToPosts(posts))
 }
