@@ -88,7 +88,7 @@ func main() {
 	v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handlGetPostForUser))
 
 	// Serve Swagger UI
-	swaggerURL := "http://" + os.Getenv("HOST") + ":" + portString + "/swagger/doc.json"
+	swaggerURL := "http://localhost:" + portString + "/swagger/doc.json"
 	router.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL(swaggerURL),
 	))
