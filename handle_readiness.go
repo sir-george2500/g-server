@@ -1,10 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 )
 
+func helloWorld(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello World!")
+}
 func responWithError(w http.ResponseWriter, code int, msg string) {
 	if code > 499 {
 		log.Println("Responding with 5xx error:", msg)
@@ -18,7 +22,7 @@ func responWithError(w http.ResponseWriter, code int, msg string) {
 	})
 }
 
-// handle respon with payload
+// handle check health
 func handlerReadiness(w http.ResponseWriter, r *http.Request) {
 	responWithJson(w, 200, struct{}{})
 }

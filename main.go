@@ -75,6 +75,7 @@ func main() {
 	// API routes
 	v1Router := chi.NewRouter()
 	v1Router.Get("/healthz", apiCfg.handleGetFeeds)
+	v1Router.Get("/", helloWorld)
 	v1Router.Get("/err", handleErr)
 	v1Router.Get("/name", apiCfg.handleGetFeeds)
 	v1Router.Post("/users", apiCfg.handleCreateUser)
