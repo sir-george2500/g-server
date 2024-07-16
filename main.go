@@ -33,23 +33,24 @@ type apiConfig struct {
 
 func main() {
 
-	godotenv.Load(".env")
-	dbURL := os.Getenv("DB_URL")
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
+	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {
-		log.Fatal("DB URL is not found in the env")
+		log.Fatal("DB_URL is not set in the environment")
 	}
 	portString := os.Getenv("PORT")
-
 	if portString == "" {
-		log.Fatal("Port not found in the env")
+		log.Fatal("PORT is not set in the environment")
 	}
 
-	// conect to the database
+	// Connect to the database
 	conn, dberr := sql.Open("postgres", dbURL)
-
 	if dberr != nil {
-		log.Fatal("fail to connect to the database", dberr)
+		log.Fatal("Failed to connect to the database:", dberr)
 	}
 	db := database.New(conn)
 	apiCfg := apiConfig{
@@ -58,13 +59,10 @@ func main() {
 
 	go startScraping(db, 10, time.Minute)
 
-	// create a new Router
+	// Create a new Router
 	router := chi.NewRouter()
-	srv := &http.Server{
-		Handler: router,
-		Addr:    ":" + portString,
-	}
-	// hanlde cors
+
+	// Handle CORS
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -74,6 +72,7 @@ func main() {
 		MaxAge:           300,
 	}))
 
+	// API routes
 	v1Router := chi.NewRouter()
 	v1Router.Get("/healthz", apiCfg.handleGetFeeds)
 	v1Router.Get("/err", handleErr)
@@ -88,18 +87,24 @@ func main() {
 	v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handlGetPostForUser))
 
 	// Serve Swagger UI
+	swaggerURL := "http://" + os.Getenv("HOST") + ":" + portString + "/swagger/doc.json"
 	router.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("https://g-server-vuri.onrender.com/swagger/doc.json"), // The url pointing to API definition
+		httpSwagger.URL(swaggerURL),
 	))
 
 	// Mount the router
 	router.Mount("/v1", v1Router)
 
 	// Start the server
-	log.Printf("Server starting on Port %v", portString)
-	err := srv.ListenAndServe()
+	srv := &http.Server{
+		Handler: router,
+		Addr:    ":" + portString,
+	}
+
+	log.Printf("Server starting on port %v", portString)
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
+
