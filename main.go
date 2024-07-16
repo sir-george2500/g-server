@@ -51,7 +51,6 @@ func main() {
 	if dberr != nil {
 		log.Fatal("fail to connect to the database", dberr)
 	}
-
 	db := database.New(conn)
 	apiCfg := apiConfig{
 		DB: db,
@@ -76,7 +75,7 @@ func main() {
 	}))
 
 	v1Router := chi.NewRouter()
-	v1Router.Get("/healthz", handlerReadiness)
+	v1Router.Get("/healthz", apiCfg.handleGetFeeds)
 	v1Router.Get("/err", handleErr)
 	v1Router.Get("/name", apiCfg.handleGetFeeds)
 	v1Router.Post("/users", apiCfg.handleCreateUser)
@@ -90,7 +89,7 @@ func main() {
 
 	// Serve Swagger UI
 	router.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("https://g-server-production.up.railway.app/swagger/doc.json"), // The url pointing to API definition
+		httpSwagger.URL("http://localhost:"+portString+"/swagger/doc.json"), // The url pointing to API definition
 	))
 
 	// Mount the router
