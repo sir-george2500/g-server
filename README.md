@@ -1,3 +1,5 @@
+https://youtu.be/xxoy7Iq_UH8
+
 # Why I Built This  
 
 I'm a reader who loves coding blogs, but there's one big problem: I hate bouncing between tabs just to catch the latest posts on my favorite blogs. Enter `g-server` - a full-blown RSS feed aggregator. What does that mean? Well, it means if I register my favorite blogs with this server, it goes out and fetches the latest 10 posts from each of them. That way, I can read all the blog posts in a single app without tab-hopping like a caffeine-fueled maniac.
