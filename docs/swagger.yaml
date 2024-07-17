@@ -92,7 +92,7 @@ definitions:
       url:
         type: string
     type: object
-host: g-server-7fg9.onrender.com
+host: g-server-production.up.railway.app
 info:
   contact:
     name: George S Mulbah
