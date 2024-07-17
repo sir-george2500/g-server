@@ -16,8 +16,15 @@ Secondly, **Golang** handles concurrency in a way that's easier and more efficie
 
 The fact that this project is based on relationships—linking users to feeds and then to their posts—shows why we went for PostgreSQL over some NoSQL database. 
 
-So there you have it! No more tab-hopping, just pure, uninterrupted reading bliss.
+for my database client `psql` commandline tools was what I use instead of the Gui like pgadmin.
 
+# Sqlc and goose 
+
+Goose was use to run the migration 
+
+Sqlc was use to converte raw sql queries to type safe go code
+
+So there you have it! No more tab-hopping, just pure, uninterrupted reading bliss.
 
 To build the executable run 
 ```bash 
@@ -33,4 +40,6 @@ PORT =
 DBURL = 
 ```
 ---
+A deploy version of this project is at [g-server]("https://g-server-7fg9.onrender.com/swagger/index.html#/")
+
 License under [MIT](https://opensource.org/licenses/MIT). This code is free to use and modify. If you like, make money out of it, even rob it as grease on your skin. I give you such permission hahaha.
