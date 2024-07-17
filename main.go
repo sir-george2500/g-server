@@ -89,7 +89,7 @@ func main() {
 
 	// Serve Swagger UI
 	router.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:"+portString+"/swagger/doc.json"), // The url pointing to API definition
+		httpSwagger.URL("https://g-server-jqnx.onrender.com/v1/swagger/doc.json"), // The url pointing to API definition
 	))
 
 	// Mount the router
