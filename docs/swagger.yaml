@@ -92,7 +92,7 @@ definitions:
       url:
         type: string
     type: object
-host: localhost:8080
+host: https://g-server-7fg9.onrender.com
 info:
   contact:
     name: George S Mulbah

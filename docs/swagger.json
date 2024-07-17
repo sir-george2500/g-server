@@ -9,7 +9,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "https://g-server-7fg9.onrender.com",
     "basePath": "/v1",
     "paths": {
         "/feed_follows": {

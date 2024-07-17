@@ -23,7 +23,7 @@ type apiConfig struct {
 // @title g-server API
 // @version 1.0
 // @description g-server - a full-blown RSS feed aggregator.
-// @host localhost:8080
+// @host https://g-server-7fg9.onrender.com
 // @BasePath /v1
 // @contact.name George S Mulbah
 // @contact.url https://github.com/sir-george2500

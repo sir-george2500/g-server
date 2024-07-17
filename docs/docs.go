@@ -477,7 +477,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "https://g-server-7fg9.onrender.com",
 	BasePath:         "/v1",
 	Schemes:          []string{},
 	Title:            "g-server API",
